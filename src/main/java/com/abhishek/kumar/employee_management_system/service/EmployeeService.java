@@ -1,10 +1,12 @@
 package com.abhishek.kumar.employee_management_system.service;
 
 import com.abhishek.kumar.employee_management_system.model.Employee;
+import com.abhishek.kumar.employee_management_system.model.EmployeeDTO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import com.abhishek.kumar.employee_management_system.model.EmployeeDetails;
 
 import java.util.List;
 
@@ -15,9 +17,10 @@ public class EmployeeService {
         factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Employee.class).buildSessionFactory();
     }
 
-    public static void saveEmployee(Employee employee) {
+    public static void saveEmployee(Employee employee , EmployeeDetails employeeDetails) {
         Session session = factory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
+        employee.setEmployeeDetails(employeeDetails);
         session.persist(employee);
         transaction.commit();
     }
@@ -30,26 +33,18 @@ public class EmployeeService {
         return employees;
     }
 
-    public Employee getEmployee(int employeeId) {
+    public static List<EmployeeDTO> getAllEmployeeDAO() {
         Session session = factory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
-        Employee employee = session.get(Employee.class, employeeId);
+
+        List<EmployeeDTO> employees = session.createQuery(
+                "SELECT new com.abhishek.kumar.employee_management_system.model.EmployeeDTO (e.id , e.name , e.department , e.salary , d.phone , d.address) " +
+                        "from Employee e join EmployeeDetails d ON e.id = d.id", EmployeeDTO.class).getResultList();
+
         transaction.commit();
-        return employee;
+        return employees;
     }
 
-    public static void updateEmployee(int id, String name, String department, double salary) {
-        Session session = factory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        Employee employee = session.get(Employee.class, id);
-        if(employee != null) {
-            employee.setName(name);
-            employee.setDepartment(department);
-            employee.setSalary(salary);
-            session.merge(employee);
-        }
-        transaction.commit();
-    }
 
     public static void deleteEmployee(int employeeId) {
         Session session = factory.getCurrentSession();

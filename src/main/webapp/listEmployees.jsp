@@ -10,13 +10,36 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee List</title>
+    <style>
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid black;
+            text-align: left;
+        }
+        .details-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid black;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-<h2>Employee List</h2>
-<table border="1">
+<h2 style="text-align: center;">Employee List</h2>
+<table>
     <thead>
     <tr>
         <th>ID</th>
@@ -36,6 +59,7 @@
     </c:forEach>
     </tbody>
 </table>
+<a href="${pageContext.request.contextPath}/hello-servlet" class="details-btn">View All Details</a>
+<a href="${pageContext.request.contextPath}/Homepage.jsp" class="details-btn">Go back</a>
 </body>
 </html>
-

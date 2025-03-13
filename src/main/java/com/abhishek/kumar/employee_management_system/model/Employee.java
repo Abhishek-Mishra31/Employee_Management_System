@@ -5,6 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+import javax.persistence.*;
+
 @Entity
 @Table(name = "employees")
 
@@ -15,7 +17,19 @@ public class Employee {
     private String name;
     private String department;
     private double salary;
-    // Constructors, getters, and setters
+
+    @OneToOne(mappedBy = "employee" ,cascade = CascadeType.ALL)
+    private EmployeeDetails employeeDetails;
+
+    public EmployeeDetails getEmployeeDetails() {
+        return employeeDetails;
+    }
+
+    public void setEmployeeDetails(EmployeeDetails employeeDetails) {
+        this.employeeDetails = employeeDetails;
+        employeeDetails.setEmployee(this);
+    }
+
     public Employee() {}
     public Employee(String name, String department, double salary) {
         this.name = name;
